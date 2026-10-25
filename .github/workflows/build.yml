@@ -55,10 +55,7 @@ jobs:
         working-directory: .
 
       - name: Build Tauri application
-        uses: tauri-apps/tauri-action@v1
-        with:
-          task: build
-          args: --target ${{ matrix.tauri-target }}
+        run: npx tauri build --target ${{ matrix.tauri-target }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

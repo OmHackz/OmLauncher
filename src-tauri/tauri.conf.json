@@ -27,7 +27,7 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "src/icons/icon.png"
+      "src-tauri/icons/icon.ico"
     ],
     "resources": [],
     "externalBin": [],

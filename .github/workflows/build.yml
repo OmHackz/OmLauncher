@@ -55,7 +55,7 @@ jobs:
         working-directory: .
 
       - name: Build Tauri application
-        uses: tauri-apps/tauri-action@v2
+        uses: tauri-apps/tauri-action@v1
         with:
           task: build
           args: --target ${{ matrix.tauri-target }}

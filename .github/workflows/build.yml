@@ -1,0 +1,108 @@
+name: Build OmLauncher
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -C link-arg=-s
+  TAURI_VERSION: 2
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            artifact-name: OmLauncher-windows
+            tauri-target: x86_64-pc-windows-msvc
+          - os: ubuntu-latest
+            platform: linux
+            artifact-name: OmLauncher-linux
+            tauri-target: x86_64-unknown-linux-gnu
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          target: ${{ matrix.tauri-target }}
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Check frontend build
+        run: npm run build
+        working-directory: .
+
+      - name: Build Tauri application
+        uses: tauri-apps/tauri-action@v2
+        with:
+          task: build
+          args: --target ${{ matrix.tauri-target }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: |
+            src-tauri/target/release/bundle/*
+          retention-days: 7
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Show artifact structure
+        run: find artifacts -type f | sort
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          tag_name: ${{ github.run_attempt }}
+          name: OmLauncher ${{ github.run_number }}
+          body: |
+            ## OmLauncher ${{ github.run_number }}
+
+            Auto-built from commit `${{ github.sha }}`.
+
+            ### Assets
+            - Windows: `OmLauncher-windows`
+            - Linux: `OmLauncher-linux`
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

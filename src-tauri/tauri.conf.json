@@ -1,0 +1,39 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "OmLauncher",
+  "version": "0.1.0",
+  "identifier": "com.omlauncher.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "OmLauncher",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.ely.by https://api.modrinth.com https://launchermeta.mojang.com https://resources.download.minecraft.net https://launcher.mojang.com https://libraries.minecraft.net;"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "src/icons/icon.png"
+    ],
+    "resources": [],
+    "externalBin": [],
+    "copyright": "© 2026 OmLauncher Team",
+    "category": "Game",
+    "shortDescription": "A fast Minecraft client manager",
+    "longDescription": "OmLauncher - Next-generation Minecraft launcher with Ore UI aesthetic."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "omlauncher",
+  "productName": "OmLauncher",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A fast, feature-rich Minecraft client manager built with Tauri and React.",
+  "author": "OmLauncher Team",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.454.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.11"
+  }
+}

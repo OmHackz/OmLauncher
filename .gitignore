@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+dist-tauri/
+src-tauri/target/
+src-tauri/target-release/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tauri
+src-tauri/gen/
+.tauri/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Certificates / signing
+*.p12
+*.pem
+*.key
+
+# Release artifacts
+release/
+artifacts/
